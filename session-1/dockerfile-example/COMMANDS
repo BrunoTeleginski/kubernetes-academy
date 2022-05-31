@@ -1,0 +1,6 @@
+#Build image
+    docker build . -t <DOCKER-REPO-NAME>/<IMAGE-NAME>
+#Run container
+    docker run -d -p <PORT>:<CONTAINER-PORT> <DOCKER-REPO-NAME>/<IMAGE-NAME>
+#Enter in container
+    docker exec -it <CONTAINER-ID> bash
