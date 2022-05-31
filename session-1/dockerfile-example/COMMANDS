@@ -4,3 +4,5 @@
     docker run -d -p <PORT>:<CONTAINER-PORT> <DOCKER-REPO-NAME>/<IMAGE-NAME>
 #Enter in container
     docker exec -it <CONTAINER-ID> bash
+#push the image to the REPO
+    docker push <DOCKER-REPO-NAME>/<IMAGE-NAME>
