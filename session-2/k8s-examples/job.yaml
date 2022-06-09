@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-test
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        command: ['sh', '-c', 'echo "ola amigos!"']
+      restartPolicy: Never
+  backoffLimit: 4
