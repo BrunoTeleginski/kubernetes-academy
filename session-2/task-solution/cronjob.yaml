@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron
+  namespace: task2
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: nginx
+            image: nginx
+            command:
+            - /bin/sh
+            - -c
+            - curl svc1 && curl svc1:3001
+          restartPolicy: OnFailure
