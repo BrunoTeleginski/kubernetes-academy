@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: container1
+          image: nginx
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - mountPath: "/shared-folder"
+            name: shared-volume
+          command: ['sh', '-c', 'touch /shared-folder/container.txt && sleep 50000']
+
+        - name: container2
+          image: nginx
+          ports:
+          - containerPort: 81
+          volumeMounts:
+          - mountPath: "/shared-folder"
+            name: shared-volume
+          command: ['sh', '-c', 'echo "container 2 wrote it!" >> /shared-folder/container.txt && sleep 50000']
+
+        - name: container3
+          image: nginx
+          ports:
+          - containerPort: 82
+          volumeMounts:
+          - mountPath: "/shared-folder"
+            name: shared-volume
+          - mountPath: "/persist-data"
+            name: persist-volume
+          command: ['sh', '-c', 'mv /shared-folder/container.txt /persist-data && sleep 50000']
+
+        - name: container4
+          image: nginx
+          ports:
+          - containerPort: 83
+          volumeMounts:
+          - mountPath: "/persist-data"
+            name: persist-volume
+          command: ['sh', '-c', 'cat /persist-data/container.txt && sleep 50000']
+
+      volumes:
+        - name: persist-volume
+          persistentVolumeClaim:
+            claimName: pv-claim
+
+        - name: shared-volume
+          emptyDir: {}
