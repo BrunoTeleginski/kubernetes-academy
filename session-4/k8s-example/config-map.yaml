@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  config.json: |
+    {
+      "sentia": "test",
+      "test": true
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example-session-4
+spec:
+  containers:
+  - name: mypod
+    image: brunoteleginski/node-session-4
+    volumeMounts:
+    - name: vol
+      mountPath: "/usr/src/app/config"
+      readOnly: true
+    ports:
+    - containerPort: 3001
+  volumes:
+  - name: vol
+    configMap:
+      name: myconfigmap
