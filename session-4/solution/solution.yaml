@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-task-4
+data:
+  configuration.json: |
+    {
+      "sentia": "test",
+      "test": true
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example-session-4
+spec:
+  containers:
+  - name: soluction-pod-task-4
+    image: brunoteleginski/node-session-4-task
+    volumeMounts:
+    - name: vol
+      mountPath: "/var/www/html/configuration"
+      readOnly: true
+    ports:
+    - containerPort: 3001
+    env:
+      - name: APP_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: secret-task-4
+            key: username
+            optional: false
+      - name: APP_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: secret-task-4
+            key: password
+            optional: false
+  volumes:
+  - name: vol
+    configMap:
+      name: cm-task-4
